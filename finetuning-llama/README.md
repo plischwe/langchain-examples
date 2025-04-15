@@ -3,8 +3,10 @@
 ## Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons.
 
 ### Prerequisite
-Install necessary packages:
+Install necessary packages
+```
 pip install -r requirements.txt
+```
 
 1) Transcribe a set of youtube videos from youtube [playlist](https://www.youtube.com/watch?v=VXzm8ReImG0&list=PLgIi4lM74yW0ChmzTdT1w5ruCnqP0bv3J&index=2)
 ```
