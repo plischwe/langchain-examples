@@ -2,7 +2,7 @@
 
 ## Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons.
 
-###Prerequisite
+### Prerequisite
 Install necessary packages:
 pip install -r requirements.txt
 
