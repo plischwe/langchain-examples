@@ -1,0 +1,6 @@
+pandas
+requests
+openai
+datasets
+youtube-transcript-api
+jupyterlab
