@@ -27,3 +27,27 @@ python bootstrap_lessons.py
 ```
 jupyter lab unsloth_llama3_8B_SFT.ipynb
 ```
+
+--> The resulting LoRA adapter weights are stored in the `outputs` directory. This path is used to load LoRA weights during inference.
+
+5) Move to Intel Core Platform machine, clone the repo and move the `outputs` directory containing LoRA adapters to the `finetuning-llama` directory to begin inference
+```
+git clone https://github.com/plischwe/langchain-examples.git
+git checkout finetuning-llama
+cd finetuning-llama
+```
+
+6) Install necessary packages for inference:
+```
+pip install -r inf_requirements.txt
+```
+
+7) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens) and use optimum-cli to convert/quantize model
+```
+optimum-cli export openvino -m meta-llama/Meta-Llama-3.1-8B-Instruct --trust-remote-code --weight-format int4 llama3.1-8b-Instruct-INT4
+```
+
+8) Run inference on example lesson transcription 
+```
+python lora_test.py --device <CPU/GPU/NPU>
+```

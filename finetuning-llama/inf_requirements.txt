@@ -1,0 +1,8 @@
+numpy==2.2.4
+openvino-genai
+optimum-intel@git+https://github.com/huggingface/optimum-intel.git
+openvino==2025.0.0
+openvino-genai==2025.0.0.0
+openvino-telemetry==2025.1.0
+openvino-tokenizers==2025.0.0.0
+packaging==24.2
