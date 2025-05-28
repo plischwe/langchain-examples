@@ -1,8 +1,8 @@
 # How to finetune an LLM on a personal dataset
 
-## Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons. The first set of steps involves finetuning an INT4 Llama3.1-8B model using youtube transcriptions to bootstrap a SFT dataset, and the unsloth jupyter notebook. The second set of instructions regards how to inference this finetuned model on Intel Core platform.
+Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons. The first set of steps involves finetuning an INT4 Llama3.1-8B model using youtube transcriptions to bootstrap a SFT dataset, and the unsloth jupyter notebook. The second set of instructions regards how to inference this finetuned model on Intel Core platform.
 
-### Part 1: Finetune Model (Done on NVIDIA hardware)
+### Part 1: Finetune Model (NVIDIA hardware)
 Install necessary packages
 ```
 pip install -r ft_requirements.txt
@@ -15,8 +15,10 @@ python transcribe.py
 
 2) Setup a VLLM server running online Llama3.3-70B in another terminal window
 ```
-VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 4 --max_model_len 16384
+VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 1 --max_model_len 16384
 ```
+
+Note: you can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`
 
 3) Create a labelled dataset from your transcribed algebra lessons
 ```
@@ -30,7 +32,7 @@ jupyter lab unsloth_llama3_8B_SFT.ipynb
 
 --> The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#` directory (mulitple training runs can result in multiple checkpoints). This path is used to load LoRA weights during inference.
 
-## Part 2: Inference the offline finetuned model (Done on Intel Core Platform)
+## Part 2: Inference the offline finetuned model (Intel Core Platform)
 
 5) Move to Intel Core Platform machine, clone this repo, and move the `outputs/checkpoint-#` directory containing LoRA adapters to this working directory
 ```
@@ -41,12 +43,22 @@ cd finetuning-llama
 --> Path to LoRA adapters should look like `.../finetuning-llama/outputs/checkpoint-#/adapter_model.safetensors`
 
 6) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens)
-7) Install necessary drivers/packages, and convert Llama for inference with install script:
+
+7) Get started by running the below command to install necessary drivers/packages.
+
 ```
 ./install.sh
+```
+
+Note: if this script has already been performed and you'd like to re-install the sample project only then the below command can be used to skip the re-install of dependencies.
+
+```
+./install.sh --skip
 ```
 
 8) Run inference on example lesson transcription, specifying the path to LoRA weights and device you'd like to inference on (default is GPU.0 for iGPU) 
 ```
 ./run-demo.sh class_transcription.txt <path_to_adapter_model.safetensors> <device>
 ```
+
+Note: You will see both the LoRA generated response as well as the non-LoRA generated response in the output.
