@@ -1,11 +1,11 @@
 # How to finetune an LLM on a personal dataset
 
-## Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons.
+## Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons. The first set of steps involves finetuning an INT4 Llama3.1-8B model using youtube transcriptions to bootstrap a SFT dataset, and the unsloth jupyter notebook. The second set of instructions regards how to inference this finetuned model on Intel Core platform.
 
-### Prerequisite
+### Part 1: Finetune Model (Done on NVIDIA hardware)
 Install necessary packages
 ```
-pip install -r requirements.txt
+pip install -r ft_requirements.txt
 ```
 
 1) Transcribe a set of youtube videos from youtube [playlist](https://www.youtube.com/watch?v=VXzm8ReImG0&list=PLgIi4lM74yW0ChmzTdT1w5ruCnqP0bv3J&index=2)
@@ -28,26 +28,25 @@ python bootstrap_lessons.py
 jupyter lab unsloth_llama3_8B_SFT.ipynb
 ```
 
---> The resulting LoRA adapter weights are stored in the `outputs` directory. This path is used to load LoRA weights during inference.
+--> The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#` directory (mulitple training runs can result in multiple checkpoints). This path is used to load LoRA weights during inference.
 
-5) Move to Intel Core Platform machine, clone the repo and move the `outputs` directory containing LoRA adapters to the `finetuning-llama` directory to begin inference
+## Part 2: Inference the offline finetuned model (Done on Intel Core Platform)
+
+5) Move to Intel Core Platform machine, clone this repo, and move the `outputs/checkpoint-#` directory containing LoRA adapters to this working directory
 ```
 git clone https://github.com/plischwe/langchain-examples.git
 git checkout finetuning-llama
 cd finetuning-llama
 ```
+--> Path to LoRA adapters should look like `.../finetuning-llama/outputs/checkpoint-#/adapter_model.safetensors`
 
-6) Install necessary packages for inference:
+6) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens)
+7) Install necessary drivers/packages, and convert Llama for inference with install script:
 ```
-pip install -r inf_requirements.txt
-```
-
-7) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens) and use optimum-cli to convert/quantize model
-```
-optimum-cli export openvino -m meta-llama/Meta-Llama-3.1-8B-Instruct --trust-remote-code --weight-format int4 llama3.1-8b-Instruct-INT4
+./install.sh
 ```
 
-8) Run inference on example lesson transcription 
+8) Run inference on example lesson transcription, specifying the path to LoRA weights and device you'd like to inference on (default is GPU.0 for iGPU) 
 ```
-python lora_test.py --device <CPU/GPU/NPU>
+./run-demo.sh class_transcription.txt <path_to_adapter_model.safetensors> <device>
 ```
