@@ -35,11 +35,6 @@ jupyter lab unsloth_llama3_8B_SFT.ipynb
 ## Part 2: Inference the offline finetuned model (Intel Core Platform)
 
 5) Move to Intel Core Platform machine, clone this repo, and move the `outputs/checkpoint-#` directory containing LoRA adapters to this working directory
-```
-git clone https://github.com/plischwe/langchain-examples.git
-git checkout finetuning-llama
-cd finetuning-llama
-```
 --> Path to LoRA adapters should look like `.../finetuning-llama/outputs/checkpoint-#/adapter_model.safetensors`
 
 6) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens)
