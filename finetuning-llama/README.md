@@ -2,15 +2,30 @@
 
 Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons. The first set of steps involves finetuning an INT4 Llama3.1-8B model using youtube transcriptions to bootstrap a SFT dataset, and the unsloth jupyter notebook. The second set of instructions regards how to inference this finetuned model on Intel Core platform.
 
-### Part 1: Finetune Model (NVIDIA hardware)
-Install necessary packages
+### Prerequisites (Intel Core Platform)
+Firstly, convert whisper model to OV for optimized transcription
 ```
-pip install -r ft_requirements.txt
+pip install openvino-genai, librosa
+optimum-cli export openvino --model openai/whisper-large-v3 ov_whisper_largev3
 ```
 
-1) Transcribe a set of youtube videos from youtube [playlist](https://www.youtube.com/watch?v=VXzm8ReImG0&list=PLgIi4lM74yW0ChmzTdT1w5ruCnqP0bv3J&index=2)
+1) Transcribe directory of audio files. Each audio file should correspond to one class session. These will be the transcriptions used in bootstrapping the training data. By default, GPU is used, and english is the selected language. You can change both of those with `--langauge` (<|hi|> for hindi, <|bn|> for bengali, <|zn|> for chinese) and `--device`.
+```
+python transcribe_audio <path_to_audio_files>
+```
+
+Note: If you do not have audio files, you can transcribe youtube videos to create your training dataset
+Transcribe a set of youtube videos from youtube [playlist](https://www.youtube.com/watch?v=VXzm8ReImG0&list=PLgIi4lM74yW0ChmzTdT1w5ruCnqP0bv3J&index=2)
 ```
 python transcribe.py
+```
+
+### Part 1: Finetune Model (NVIDIA hardware)
+Move resulting `.csv` file to the current directory you are working in, on the NVIDIA machine.
+
+Install necessary packages for finetuning
+```
+pip install -r ft_requirements.txt
 ```
 
 2) Setup a VLLM server running online Llama3.3-70B in another terminal window
@@ -24,8 +39,9 @@ Note: you can scale `--tensor-parallel` with the amount of GPUs that are accessi
 ```
 python bootstrap_lessons.py
 ```
+Note: Ensure `class_transcriptions.csv` is in the same directory as `bootstrap_lessons.py`.
 
-4) Launch unsloth QLoRA finetuning script on the resulting labelled data
+4) Once done labelling data, it is time to use it to finetune Llama. In another terminal window, launch and step through the unsloth QLoRA finetuning notebook
 ```
 jupyter lab unsloth_llama3_8B_SFT.ipynb
 ```

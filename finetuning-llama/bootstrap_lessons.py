@@ -3,7 +3,7 @@ import requests
 import time
 from openai import OpenAI
 
-df = pd.read_csv("math_course_lessons.csv")
+df = pd.read_csv("course_lessons.csv")
 if "lesson_plan" not in df.columns:
     df["lesson_plan"] = ""
 
@@ -14,16 +14,16 @@ client = OpenAI(
 
 def generate_lesson_plan(transcription):
     prompt = """You are an intelligent AI assistant who is an expert at making lesson plans for elementary school math teachers. Given the following 
-    trancription of a math, you are tasked to generate a structured, concise lesson plans that comprehensively cover the material presented in the transcription 
-    while strictly focusing on the math content covered in the lesson.
+    trancription of a class session, you are tasked to generate a structured, concise lesson plans that comprehensively cover the material presented in the transcription 
+    while strictly focusing on the substantive content covered by the teacher in the lesson.
     """
     content = f"""Please create a lesson plan for the following lesson transcription. The lesson plan should include:
-    - Learning objectives (mathematical goals)
-    - Key concepts and formulas introduces.
+    - Learning objectives & goals
+    - Key concepts or formulas introduces.
     - Steps or proceedures taught.
     - Example problems or problem types discussed.
     - Summary of what the students should understand by the end.
-    Do not include and behvioral tips or any introduction/conclusion to your response - focus only on the mathematical substance.
+    Do not include and behvioral tips or any introduction/conclusion to your response - focus only on the course content.
     Here is the lesson transcription: {transcription} \n"""
 
     chat_response = client.chat.completions.create(
