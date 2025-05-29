@@ -9,9 +9,9 @@ pip install openvino-genai, librosa
 optimum-cli export openvino --model openai/whisper-large-v3 ov_whisper_largev3
 ```
 
-1) Transcribe directory of audio files. Each audio file should correspond to one class session. These will be the transcriptions used in bootstrapping the training data. By default, GPU is used, and english is the selected language. You can change both of those with `--langauge` (<|hi|> for hindi, <|bn|> for bengali, <|zn|> for chinese) and `--device`.
+Transcribe directory of audio files. Each audio file should correspond to one class session. These will be the transcriptions used in bootstrapping the training data. By default, GPU is used, and english is the selected language. You can change both of those with `--langauge` (<|hi|> for hindi, <|bn|> for bengali, <|zn|> for chinese) and `--device`.
 ```
-python transcribe_audio <path_to_audio_files>
+python transcribe_audio.py <path_to_audio_files>
 ```
 
 Note: If you do not have audio files, you can transcribe youtube videos to create your training dataset
@@ -21,7 +21,7 @@ python transcribe.py
 ```
 
 ### Part 1: Finetune Model (NVIDIA hardware)
-Move resulting `.csv` file to the current directory you are working in, on the NVIDIA machine.
+Move resulting `class_transcription.csv` file to the current directory you are working in, on the NVIDIA machine.
 
 Install necessary packages for finetuning
 ```
@@ -32,7 +32,6 @@ pip install -r ft_requirements.txt
 ```
 VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 1 --max_model_len 16384
 ```
-
 Note: you can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`
 
 3) Create a labelled dataset from your transcribed algebra lessons
