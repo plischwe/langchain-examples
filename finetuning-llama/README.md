@@ -1,6 +1,6 @@
 # How to finetune an LLM on a personal dataset
 
-Below are steps to create a training dataset from a set of Youtube videos. In this example, algebra course videos are used to represent typical math lessons. The first set of steps involves finetuning an INT4 Llama3.1-8B model using youtube transcriptions to bootstrap a SFT dataset, and the unsloth jupyter notebook. The second set of instructions regards how to inference this finetuned model on Intel Core platform.
+Below are steps to create a training dataset from a set of Youtube videos. In this example, a directory of audio file, or algebra course videos are used to represent typical class lessons. The first set of steps involves finetuning an INT4 weight-compressed Llama3.1-8B model using the transcriptions of the class sessions to create a labelled, Supervised FineTuning dataset that will be used in the jupyter notebook to train the model. The second set of instructions details how to inference this finetuned model on an Intel Core platform.
 
 ### Prerequisites (Intel Core Platform)
 Firstly, convert whisper model to OV for optimized transcription
@@ -23,29 +23,33 @@ python transcribe.py
 ### Part 1: Finetune Model (NVIDIA hardware)
 Move resulting `course_lessons.csv` file to the current directory you are working in, on the NVIDIA machine.
 
-Install necessary packages for finetuning
+**Dependencies**- Python >= 3.10 - [Conda](https://www.anaconda.com/docs/getting-started/miniconda/install#linux)/[miniforge](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl)
+Create new environment, activate it, and install necessary packages for finetuning
 ```
+conda create -n bootstrap python=3.10
+conda activate bootstrap
 pip install -r ft_requirements.txt
 ```
 
-2) Setup a VLLM server running online Llama3.3-70B in another terminal window
+2) Setup a VLLM server running online Llama3.3-70B
 ```
 VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 1 --max_model_len 16384
 ```
-Note: you can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`
+Note: You can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`
 
-3) Create a labelled dataset from your transcribed algebra lessons
+3) In another terminal window while the vLLM Llama server is running, create a labelled dataset from your transcribed algebra lessons
 ```
+conda activate bootstrap
 python bootstrap_lessons.py
 ```
 Note: Ensure `class_transcriptions.csv` is in the same directory as `bootstrap_lessons.py`.
 
-4) Once done labelling data, it is time to use it to finetune Llama. In another terminal window, launch and step through the unsloth QLoRA finetuning notebook
+4) Once done labelling data, it is time to use it to finetune Llama. Now launch and step through the unsloth QLoRA finetuning notebook
 ```
 jupyter lab unsloth_llama3_8B_SFT.ipynb
 ```
 
---> The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#` directory (mulitple training runs can result in multiple checkpoints). This path is used to load LoRA weights during inference.
+Note: The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#` directory (mulitple training runs can result in multiple checkpoints). This path is used to load LoRA weights during inference.
 
 ## Part 2: Inference the offline finetuned model (Intel Core Platform)
 
