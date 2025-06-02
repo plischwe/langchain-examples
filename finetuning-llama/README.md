@@ -21,7 +21,7 @@ python transcribe.py
 ```
 
 ### Part 1: Finetune Model (NVIDIA hardware)
-Move resulting `class_transcription.csv` file to the current directory you are working in, on the NVIDIA machine.
+Move resulting `course_lessons.csv` file to the current directory you are working in, on the NVIDIA machine.
 
 Install necessary packages for finetuning
 ```
