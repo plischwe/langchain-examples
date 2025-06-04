@@ -5,12 +5,12 @@ Below are steps to create a training dataset from a set of Youtube videos. In th
 ### Prerequisites (Intel Core Platform)
 Firstly, convert whisper model to OV for optimized transcription. If you are transcribing youtube videos and not local audio files, run the second install (with `--skip-model`) to not convert whisper model.
 ```
-./tr_install.sh
+./transcribe_install.sh
 ```
 
 Note: If you are transcribing youtube videos, only install driver/software dependencies without downloading/converting whisper transcription model.
 ```
-./tr_install.sh --skip-model
+./transcribe_install.sh --skip-model
 ```
 
 Transcribe directory of audio files. Each audio file should correspond to one class session. These will be the transcriptions used in bootstrapping the training data. By default, GPU is used, and english is the selected language. You can change both of those with `--langauge` (<|hi|> for hindi, <|bn|> for bengali, <|zh|> for chinese) and `--device`.
