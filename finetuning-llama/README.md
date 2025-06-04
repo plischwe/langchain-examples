@@ -3,14 +3,14 @@
 Below are steps to create a training dataset from a set of Youtube videos. In this example, a directory of audio file, or algebra course videos are used to represent typical class lessons. The first set of steps involves finetuning an INT4 weight-compressed Llama3.1-8B model using the transcriptions of the class sessions to create a labelled, Supervised FineTuning dataset that will be used in the jupyter notebook to train the model. The second set of instructions details how to inference this finetuned model on an Intel Core platform.
 
 ### Prerequisites (Intel Core Platform)
-Firstly, convert whisper model to OV for optimized transcription.
+Firstly, convert whisper model to OV for optimized transcription. If you are transcribing youtube videos and not local audio files, run the second install (with `--skip-model`) to not convert whisper model.
 ```
-./install.sh
+./tr_install.sh
 ```
 
-Note: If this script has been run before, re-install software dependencies without re-installing  drivers and downloading/converting whisper transcription model.
+Note: If you are transcribing youtube videos, only install driver/software dependencies without downloading/converting whisper transcription model.
 ```
-./install.sh --skip
+./tr_install.sh --skip-model
 ```
 
 Transcribe directory of audio files. Each audio file should correspond to one class session. These will be the transcriptions used in bootstrapping the training data. By default, GPU is used, and english is the selected language. You can change both of those with `--langauge` (<|hi|> for hindi, <|bn|> for bengali, <|zh|> for chinese) and `--device`.
@@ -22,6 +22,7 @@ python transcribe_audio.py --audio_dir <path_to_audio_files> --language '<|en|>'
 Note: If you do not have audio files, you can transcribe youtube videos to create your training dataset
 Transcribe a set of youtube videos from youtube [playlist](https://www.youtube.com/watch?v=VXzm8ReImG0&list=PLgIi4lM74yW0ChmzTdT1w5ruCnqP0bv3J&index=2)
 ```
+conda activate transcribe
 python transcribe.py
 ```
 
@@ -66,13 +67,13 @@ Note: The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#
 7) Get started by running the below command to install necessary drivers/packages.
 
 ```
-./install.sh
+./lora_install.sh
 ```
 
 Note: if this script has already been performed and you'd like to re-install the sample project only then the below command can be used to skip the re-install of dependencies and model download/conversion.
 
 ```
-./install.sh --skip
+./lora_install.sh --skip
 ```
 
 8) Run inference on the example math lesson transcription `class_transcription.txt`, specifying the path to LoRA weights and device you'd like to inference on (default is GPU.0 for iGPU) 
