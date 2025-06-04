@@ -12,10 +12,10 @@ source activate-conda.sh
 # one-time installs
 if [ "$1" == "--skip" ]
 then
-	echo "Skipping LoRA inference dependencies"
+	echo "Skipping Transcribe inference dependencies"
 	activate_conda
 else
-	echo "Installing LoRA inference dependencies"
+	echo "Installing Transcribe inference dependencies"
 	sudo DEBIAN_FRONTEND=noninteractive apt update
 	sudo DEBIAN_FRONTEND=noninteractive apt install git ffmpeg vim wget -y
 
@@ -45,21 +45,18 @@ else
 	cd ..
 
 fi
-echo "Installing chapterization"
+echo "Installing transcription dependency setup"
 # Default Python to Ubuntu 22.04.5
-conda create -n lora_env python=3.10.12 -y # for a specific version
-conda activate lora_env
+conda create -n transcribe python=3.10.12 -y # for a specific version
+conda activate transcribe
 echo 'y' | conda install pip
 
-pip install -r inf_requirements.txt
-pip install wheel setuptools langchain-openai langchain_community langchain-huggingface
+pip install -r tr_requirements.txt
 pip install --upgrade-strategy eager "optimum[openvino,nncf]==1.23.3"
-git clone https://github.com/gsilva2016/langchain.git
-pip install -e langchain/libs/community
 
 if [ "$1" == "--skip" ]; then
   echo "Skipping OpenVINO optimized model file creation"
 else
-  echo "Creating OpenVINO optimized model files for Llama3"
-  optimum-cli export openvino -m meta-llama/Llama-3.1-8B-Instruct --trust-remote-code --weight-format int4 llama3.1-8b-Instruct-INT4
+  echo "Creating OpenVINO optimized model files for whisper_largev3"
+  optimum-cli export openvino --model openai/whisper-large-v3 ov_whisper_largev3
 fi

@@ -1,0 +1,3 @@
+openvino-genai
+librosa
+optimum-intel@git+https://github.com/huggingface/optimum-intel.git

@@ -3,18 +3,19 @@
 Below are steps to create a training dataset from a set of Youtube videos. In this example, a directory of audio file, or algebra course videos are used to represent typical class lessons. The first set of steps involves finetuning an INT4 weight-compressed Llama3.1-8B model using the transcriptions of the class sessions to create a labelled, Supervised FineTuning dataset that will be used in the jupyter notebook to train the model. The second set of instructions details how to inference this finetuned model on an Intel Core platform.
 
 ### Prerequisites (Intel Core Platform)
-**Dependencies**- Python >= 3.10 - [Conda](https://www.anaconda.com/docs/getting-started/miniconda/install#linux)/[miniforge](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl)
-Create new environment, activate it, and install necessary packages for class audio transcription.
-Firstly, convert whisper model to OV for optimized transcription
+Firstly, convert whisper model to OV for optimized transcription.
 ```
-conda create -n transcribe python=3.10
-conda activate transcribe
-pip install -r tr_requirements.txt
-optimum-cli export openvino --model openai/whisper-large-v3 ov_whisper_largev3
+./install.sh
+```
+
+Note: If this script has been run before, re-install software dependencies without re-installing  drivers and downloading/converting whisper transcription model.
+```
+./install.sh --skip
 ```
 
 Transcribe directory of audio files. Each audio file should correspond to one class session. These will be the transcriptions used in bootstrapping the training data. By default, GPU is used, and english is the selected language. You can change both of those with `--langauge` (<|hi|> for hindi, <|bn|> for bengali, <|zh|> for chinese) and `--device`.
 ```
+conda activate transcribe
 python transcribe_audio.py --audio_dir <path_to_audio_files> --language '<|en|>'
 ```
 
@@ -68,7 +69,7 @@ Note: The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#
 ./install.sh
 ```
 
-Note: if this script has already been performed and you'd like to re-install the sample project only then the below command can be used to skip the re-install of dependencies.
+Note: if this script has already been performed and you'd like to re-install the sample project only then the below command can be used to skip the re-install of dependencies and model download/conversion.
 
 ```
 ./install.sh --skip
