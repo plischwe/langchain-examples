@@ -14,7 +14,7 @@ from langchain_core.documents import Document
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--device', type=str, default='GPU')
-    parser.add_argument('-text', '--transcription')
+    parser.add_argument('-tr', '--transcription', default='class_transcription.txt')
     parser.add_argument('-llm', '--llm_path', type=str, default='llama3.1-8b-Instruct-INT4', help="Path to quantized OV Llama model")
     parser.add_argument('-lora', '--lora_path', type=str, default='outputs/adapter_model.safetensors', help="Path to LoRA adapter weights from finetuning")
     args = parser.parse_args()

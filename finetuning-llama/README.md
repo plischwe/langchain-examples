@@ -74,9 +74,9 @@ Note: if this script has already been performed and you'd like to re-install the
 ./install.sh --skip
 ```
 
-8) Run inference on example lesson transcription, specifying the path to LoRA weights and device you'd like to inference on (default is GPU.0 for iGPU) 
+8) Run inference on the example math lesson transcription `class_transcription.txt`, specifying the path to LoRA weights and device you'd like to inference on (default is GPU.0 for iGPU) 
 ```
-./run-demo.sh class_transcription.txt <path_to_adapter_model.safetensors> <device>
+./run-demo.sh -tr class_transcription.txt -lora <path_to_adapter_model.safetensors> -d <device>
 ```
 
 Note: You will see both the LoRA generated response as well as the non-LoRA generated response in the output.
