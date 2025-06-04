@@ -4,7 +4,7 @@ Below are steps to create a training dataset from a set of Youtube videos. In th
 
 ### Prerequisites (Intel Core Platform)
 **Dependencies**- Python >= 3.10 - [Conda](https://www.anaconda.com/docs/getting-started/miniconda/install#linux)/[miniforge](https://github.com/conda-forge/miniforge?tab=readme-ov-file#unix-like-platforms-macos-linux--wsl)
-Create new environment, activate it, and install necessary packages for finetuning
+Create new environment, activate it, and install necessary packages for class audio transcription.
 Firstly, convert whisper model to OV for optimized transcription
 ```
 conda create -n transcribe python=3.10
