@@ -37,7 +37,7 @@ pip install -r ft_requirements.txt
 
 2) Setup a VLLM server running online Llama3.3-70B
 ```
-VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 4 --max_model_len 16384
+VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 4 --max_model_len 16384 --port 8000
 ```
 Note: You can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`
 

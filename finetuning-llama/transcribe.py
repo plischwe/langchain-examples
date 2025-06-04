@@ -52,7 +52,7 @@ def segment_transcript(transcript):
         lessons.append(f"{lesson_title}\n{lesson_content}")
     return lessons
 
-# Create a list of dictionaries of video_name and corresponding transcriptions for HF Dataset
+# Create a list of dictionaries of source_name and corresponding transcriptions for HF Dataset
 video_transcriptions = []
 print(video_playlist)
 for video_id in video_playlist:
@@ -63,11 +63,11 @@ for video_id in video_playlist:
     #Here is where you can clean/segment transcripts by lesson
     lessons = segment_transcript(transcript_as_text)
     for i, lesson in enumerate(lessons, 1):
-         video_transcriptions.append({'video_name': f"{video_name}_lesson_{i}", 'transcription': lesson})
+         video_transcriptions.append({'source_name': f"{video_name}_lesson_{i}", 'transcription': lesson})
 
     print(f"Successfully transcribed {video_name}")
 
-transcribed_lessons_file = "math_course_lessons.csv"
+transcribed_lessons_file = "course_lessons.csv"
 
 with open(transcribed_lessons_file, mode='w', newline='', encoding='utf-8') as file:
     fieldnames = video_transcriptions[0].keys()

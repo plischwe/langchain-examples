@@ -27,7 +27,7 @@ for class_audio in os.listdir(audio_dir):
         raw_speech = read_wav(os.path.join(audio_dir, class_audio))
         lesson = pipe.generate(raw_speech, config)
         print(f"Transcribed text: {lesson}")
-        class_transcriptions.append({'audio_file': f"{class_audio}", 'transcription': lesson})
+        class_transcriptions.append({'source_name': f"{class_audio}", 'transcription': lesson})
         print(f"Successfully transcribed {class_audio}")
 
 transcribed_lessons_file = "course_lessons.csv"

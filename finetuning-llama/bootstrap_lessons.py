@@ -41,7 +41,7 @@ for idx, row in df.iterrows():
     if pd.notna(row["lesson_plan"]) and row["lesson_plan"].strip() != "":
         continue
 
-    print(f"Processing row {idx+1}/{len(df)}: {row['video_name']}")
+    print(f"Processing row {idx+1}/{len(df)}: {row['source_name']}")
     plan = generate_lesson_plan(row['transcription'])
     df.at[idx, "lesson_plan"] = plan
     df.to_csv("lessons_with_plans.csv", index=False)
