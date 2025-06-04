@@ -37,7 +37,7 @@ pip install -r ft_requirements.txt
 
 2) Setup a VLLM server running online Llama3.3-70B
 ```
-VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 1 --max_model_len 16384
+VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 4 --max_model_len 16384
 ```
 Note: You can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`
 
@@ -46,7 +46,7 @@ Note: You can scale `--tensor-parallel` with the amount of GPUs that are accessi
 conda activate bootstrap
 python bootstrap_lessons.py
 ```
-Note: Ensure `class_transcriptions.csv` is in the same directory as `bootstrap_lessons.py`.
+Note: Ensure `course_lessons.csv` is in the same directory as `bootstrap_lessons.py`.
 
 4) Once done labelling data, it is time to use it to finetune Llama. Now launch and step through the unsloth QLoRA finetuning notebook
 ```
