@@ -5,3 +5,4 @@ openai
 datasets
 youtube-transcript-api
 jupyterlab
+huggingface_hub[cli]

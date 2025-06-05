@@ -45,7 +45,7 @@ else
 	cd ..
 
 fi
-echo "Installing chapterization"
+echo "Installing lora dependencies"
 # Default Python to Ubuntu 22.04.5
 conda create -n lora python=3.10.12 -y # for a specific version
 conda activate lora

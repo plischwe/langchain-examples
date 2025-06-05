@@ -8,3 +8,4 @@ openvino-tokenizers==2025.0.0.0
 packaging==24.2
 scikit-learn
 tiktoken
+huggingface_hub[cli]

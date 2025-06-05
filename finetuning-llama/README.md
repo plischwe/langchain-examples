@@ -36,19 +36,25 @@ conda create -n bootstrap python=3.10
 conda activate bootstrap
 pip install -r ft_requirements.txt
 ```
+1) Get access to [llama3.3-70B](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens):
+```
+huggingface-cli login
+```
 
 2) Setup a VLLM server running online Llama3.3-70B
 ```
 VLLM_SKIP_WARMUP=true vllm serve meta-llama/Llama-3.3-70B-Instruct --task generate --trust-remote-code --tensor-parallel 4 --max_model_len 16384 --port 8000
 ```
-Note: You can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`
+Note: You can scale `--tensor-parallel` with the amount of GPUs that are accessible. So if you have 4 cards, you can utilize all with `--tensor-parallel 4`. We utilize 4 cards due to the size of the model, as a 70B parameter model is recommending for generating higher quality labelled data for finetuning.
 
 3) In another terminal window while the vLLM Llama server is running, create a labelled dataset from your transcribed algebra lessons
 ```
 conda activate bootstrap
 python bootstrap_lessons.py
 ```
+Note: You can change prompt in `bootstrap_lessons.py` to a custom prompt when creating lesson plans from transcriptions.
 Note: Ensure `course_lessons.csv` is in the same directory as `bootstrap_lessons.py`.
+
 
 4) Once done labelling data, it is time to use it to finetune Llama. Now launch and step through the unsloth QLoRA finetuning notebook
 ```
@@ -62,7 +68,7 @@ Note: The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#
 5) Move to Intel Core Platform machine, clone this repo, and move the `outputs/checkpoint-#` directory containing LoRA adapters to this working directory
 --> Path to LoRA adapters should look like `.../finetuning-llama/outputs/checkpoint-#/adapter_model.safetensors`
 
-6) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens)
+6) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens) and use `huggingface-cli login` if necessary 
 
 7) Get started by running the below command to install necessary drivers/packages.
 

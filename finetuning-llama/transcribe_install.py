@@ -54,7 +54,7 @@ echo 'y' | conda install pip
 pip install -r tr_requirements.txt
 pip install --upgrade-strategy eager "optimum[openvino,nncf]==1.23.3"
 
-if [ "$1" == "--skip" ]; then
+if [ "$1" == "--skip-model" ]; then
   echo "Skipping OpenVINO optimized model file creation"
 else
   echo "Creating OpenVINO optimized model files for whisper_largev3"

@@ -25,6 +25,7 @@ audio_dir = args.audio_dir
 for class_audio in os.listdir(audio_dir):
     if class_audio.lower().endswith(audio_extensions):
         raw_speech = read_wav(os.path.join(audio_dir, class_audio))
+        print(f"Starting transcription of {class_audio}")
         lesson = pipe.generate(raw_speech, config)
         print(f"Transcribed text: {lesson}")
         class_transcriptions.append({'source_name': f"{class_audio}", 'transcription': lesson})
