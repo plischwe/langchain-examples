@@ -68,9 +68,9 @@ Note: The resulting LoRA adapter weights are stored in the `outputs/checkpoint-#
 5) Move to Intel Core Platform machine, clone this repo, and move the `outputs/checkpoint-#` directory containing LoRA adapters to this working directory
 --> Path to LoRA adapters should look like `.../finetuning-llama/outputs/checkpoint-#/adapter_model.safetensors`
 
-6) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens) and use `huggingface-cli login` if necessary
+6) Get access to gated [Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) model from HF using an [access token](https://huggingface.co/docs/hub/en/security-tokens)
 
-7) Get started by running the below command to install necessary drivers/packages.
+7) Get started by running the below command to install necessary drivers/packages. You will be prompted for the HF token you just created, that is when you paste the token and the model will then be downloaded.
 
 ```
 bash lora_install.sh
