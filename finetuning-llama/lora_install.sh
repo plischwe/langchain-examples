@@ -53,10 +53,12 @@ echo 'y' | conda install pip
 
 pip install -r inf_requirements.txt
 pip install wheel setuptools langchain-openai langchain_community langchain-huggingface
-pip install --upgrade-strategy eager "optimum[openvino,nncf]==1.23.3"
+pip install optimum-intel@git+https://github.com/huggingface/optimum-intel.git
+pip install nncf
+pip install openvino-genai==2025.1.0
 git clone https://github.com/gsilva2016/langchain.git
 pip install -e langchain/libs/community
-pip install "huggingface_hub[cli]"
+pip install huggingface_hub
 
 if [ "$1" == "--skip" ]; then
   echo "Skipping OpenVINO optimized model file creation"

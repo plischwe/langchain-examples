@@ -81,6 +81,7 @@ def main():
             	- Be explicit in grounding the concepts to problems
             **Summary of what the students should understand by end**
 		- Summary of the goals students should achieve when done
+            Remember to only include this format in your response and nothing else.
             Here is the transcribed lesson from class to construct the above lesson plan from: {text}\n Answer: """
 
         adapter = openvino_genai.Adapter(args.lora_path)
